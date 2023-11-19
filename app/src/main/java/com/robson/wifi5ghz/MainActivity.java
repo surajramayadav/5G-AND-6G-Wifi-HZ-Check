@@ -42,6 +42,13 @@ public class MainActivity extends AppCompatActivity {
             Log.d("test", "Device is not connected to a 5GHz Wi-Fi network");
         }
 
+        // Check if the device is connected to a 60GHz Wi-Fi network
+        if (isConnectedTo60GHzWiFi()) {
+            Log.d("test", "Device is connected to a 60GHz Wi-Fi network");
+        } else {
+            Log.d("test", "Device is not connected to a 60GHz Wi-Fi network");
+        }
+
 
     }
 
@@ -54,6 +61,21 @@ public class MainActivity extends AppCompatActivity {
             int frequency = wifiInfo.getFrequency(); // in MHz
             Log.d("test", "Device frequency"+frequency);
             return frequency >= 5170 && frequency <= 5835; // 5GHz frequency range
+        }
+
+        return false;
+    }
+
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private boolean isConnectedTo60GHzWiFi() {
+        WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+
+        if (wifiManager != null) {
+            WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+            int frequency = wifiInfo.getFrequency(); // in MHz
+
+            return frequency >= 56160 && frequency <= 56580; // 60GHz frequency range
         }
 
         return false;
